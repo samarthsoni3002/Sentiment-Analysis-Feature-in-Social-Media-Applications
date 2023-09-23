@@ -12,7 +12,9 @@ cloudinary.config({
 const CreatePost = async (req, res) => {
   try {
     const { caption , userId } = req.body;
-    const { file } = req.File;
+    const file = req.files.file;
+
+    console.log(file);
 
     if (!file || !caption || !userId) {
       return res.status(400).json({
@@ -22,8 +24,8 @@ const CreatePost = async (req, res) => {
     }
 
     // Upload the image to Cloudinary
-    const cloudinaryResponse = await cloudinary.uploader.upload(file.path, {
-      folder: 'CodeHelp', // Specify the folder where you want to store the image
+    const cloudinaryResponse = await cloudinary.uploader.upload(file.tempFilePath, {
+      folder: 'simple', 
     });
 
     // Create a new post in your database with the Cloudinary image URL
@@ -42,6 +44,7 @@ const CreatePost = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Post created successfully",
+      cloudinaryResponse,
       post: newPost,
     });
   } catch (error) {
@@ -55,31 +58,40 @@ const CreatePost = async (req, res) => {
 
 
 const DeletePost = async (req, res) => {
-    try {
-      const postId = req.params.id; // Assuming you're passing the post ID as a route parameter
-  
-      // Step 1: Delete the post from the Post schema
-      await Post.findByIdAndDelete(postId);
-  
-      // Step 2: Remove the reference to the post from the User schema
-      // You may need to adjust this depending on how the User schema is structured
-      await User.updateMany(
-        { posts: postId }, 
-        { $pull: { posts: postId } } 
-      );
-  
-      return res.status(200).json({
-        success: true,
-        message: "Post deleted successfully",
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({
+  try {
+    const postId = req.body.post_Id; // Extract the postId from req.body
+
+    console.log(postId);
+
+    // Step 1: Delete the post from the Post schema
+    const deletedPost = await Post.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res.status(404).json({
         success: false,
-        message: "Internal Server Error",
+        message: "Post not found",
       });
     }
-  };
+
+    // Step 2: Remove the reference to the post from the User schema
+    // You may need to adjust this depending on how the User schema is structured
+    await User.updateMany(
+      { posts: postId },
+      { $pull: { posts: postId } }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Post deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
 
 
 const ShowAllPost = async (req, res) => {
