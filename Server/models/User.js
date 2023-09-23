@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
   userImage: {
     type: String, // Store the URL of the user's image
   },
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Post', // Reference the 'Post' model
+    },
+  ],
 });
 
 const User = mongoose.model('User', userSchema);

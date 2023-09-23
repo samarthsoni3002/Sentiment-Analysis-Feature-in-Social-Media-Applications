@@ -13,7 +13,7 @@ const commentSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: true,
+    default: "", // Default value is an empty string
   },
   createdAt: {
     type: Date,
