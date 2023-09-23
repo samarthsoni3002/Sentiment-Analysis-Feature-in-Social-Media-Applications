@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-exports.SignUp = async (req, res) => {
+const SignUp = async (req, res) => {
     try {
         const { firstName , lastName, userName, email, password , confirmPassword } = req.body;
         
@@ -43,7 +43,11 @@ exports.SignUp = async (req, res) => {
     
         await newUser.save();
     
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({
+          success:  true,
+          message: 'User registered successfully',
+          newUser 
+        });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
@@ -51,7 +55,7 @@ exports.SignUp = async (req, res) => {
 }
 
 
-exports.login =  async (req, res) => {
+const login =  async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -99,3 +103,9 @@ exports.login =  async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
 }
+
+
+module.exports = {
+  SignUp,
+  login,
+};

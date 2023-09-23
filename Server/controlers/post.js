@@ -1,48 +1,43 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
-const cloudinary = require('./cloudinaryConfig');
+const cloudinary = require('cloudinary').v2;
 
-exports.CreatePost = async (req, res) => {
+cloudinary.config({
+  cloud_name: 'dtpuvzwyu', // Replace with your Cloudinary cloud name
+  api_key: '443257453111698',       // Replace with your Cloudinary API key
+  api_secret: 'G_tLJ1hpiFytfIIhQY9Su9ZnQZw', // Replace with your Cloudinary API secret
+});
+
+
+const CreatePost = async (req, res) => {
   try {
-    const { caption } = req.body;
-    const { files } = req;
+    const { caption , userId } = req.body;
+    const { file } = req.File;
 
-    if (!files || !files.image) {
-      return res.status(401).json({
+    if (!file || !caption || !userId) {
+      return res.status(400).json({
         success: false,
-        message: "Image Uploading Error",
+        message: "Incomplete post data",
       });
     }
 
-    const folder = ""; // Specify your desired folder in Cloudinary
-    const height = 300; // Set the desired height (optional)
-    const quality = "auto"; // Set the desired quality (optional)
-
-    // Function to upload an image to Cloudinary
-    const uploadImageToCloudinary = async (file, folder, height, quality) => {
-      const options = { folder };
-      if (height) {
-        options.height = height;
-      }
-      if (quality) {
-        options.quality = quality;
-      }
-      options.resource_type = "auto";
-
-      return await cloudinary.uploader.upload(file.tempFilePath, options);
-    };
-
     // Upload the image to Cloudinary
-    const response = await uploadImageToCloudinary(files.image, folder, height, quality);
+    const cloudinaryResponse = await cloudinary.uploader.upload(file.path, {
+      folder: 'CodeHelp', // Specify the folder where you want to store the image
+    });
 
-    // Create a new post in your database with the image URL and caption
+    // Create a new post in your database with the Cloudinary image URL
     const newPost = new Post({
-      imageUrl: response.secure_url, // Assuming the Cloudinary response contains the secure URL
+      userId,
       caption,
+      imageUrl: cloudinaryResponse.secure_url,
     });
 
     // Save the new post to the database
     await newPost.save();
+
+    // Update the user's posts array with the new post ID
+    await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } });
 
     return res.status(201).json({
       success: true,
@@ -59,8 +54,7 @@ exports.CreatePost = async (req, res) => {
 };
 
 
-
-exports.DeletePost = async (req, res) => {
+const DeletePost = async (req, res) => {
     try {
       const postId = req.params.id; // Assuming you're passing the post ID as a route parameter
   
@@ -88,7 +82,7 @@ exports.DeletePost = async (req, res) => {
   };
 
 
-exports.ShowAllPost = async (req, res) => {
+const ShowAllPost = async (req, res) => {
   try {
     // Fetch all posts from the database
     const posts = await Post.find();
@@ -115,3 +109,6 @@ exports.ShowAllPost = async (req, res) => {
     });
   }
 };
+
+
+module.exports = { CreatePost , DeletePost , ShowAllPost };
