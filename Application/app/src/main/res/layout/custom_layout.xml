@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/profileImg"
@@ -31,8 +31,6 @@
         android:src="@drawable/postimg"
         android:layout_width="0dp"
         android:layout_height="300dp"
-        android:layout_margin="5dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImg" />
@@ -42,7 +40,7 @@
         android:src="@drawable/like"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="@+id/post"
         app:layout_constraintTop_toBottomOf="@+id/post" />
@@ -52,7 +50,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/comment"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintStart_toEndOf="@+id/likeImg"
         app:layout_constraintTop_toBottomOf="@+id/post" />
@@ -61,7 +59,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/share"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@+id/commentImg"
         app:layout_constraintTop_toBottomOf="@+id/post" />
