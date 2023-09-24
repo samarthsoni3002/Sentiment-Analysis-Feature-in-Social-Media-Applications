@@ -7,6 +7,7 @@ const authRoutes = require('./RoutesMaking/Auth'); // Correct module name
 const postRoutes = require('./RoutesMaking/PostR');
 const LikeRoutes = require("./RoutesMaking/LikeR");
 const commentRoutes = require("./RoutesMaking/CommentR");
+const cors = require('cors');
 require('dotenv').config();
 
 connectToDatabase();
@@ -14,6 +15,14 @@ connectToDatabase();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+      origin:"*",
+      Credentials:true,
+  })
+)
+
 app.use(
   fileUpload({
     useTempFiles: true,

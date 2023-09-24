@@ -3,52 +3,59 @@ import { setLoading } from "../../Slices/AuthSlice";
 import { setUserId } from "../../Slices/AuthSlice";
 import { apiConnector } from "../ApiConnector";
 import { endPoints } from "../apis";
+import { setUserData } from "../../Slices/UserSlice";
 
 const {
 
     SIGNUP_API,
     LOGIN_API, 
-    CREATE_POST,
-    DELETE_POST,
-    SHOW_POSTS,
-    LIKE_POST,
-    UNLIKE_POST,
-    COMMENT_ON_POST,
-    DELETE_COMMENT,
-    SHOW_COMMENTS,
 
 } =  endPoints;
 
 export function login(email, password, navigate) {
     return async (dispatch) => {
-      const toastId = toast.loading("Loading...")
-      dispatch(setLoading(true))
+    //   const toastId = toast.loading("Loading...");
+      dispatch(setLoading(true));
+
       try {
         const response = await apiConnector("POST", LOGIN_API, {
           email,
           password,
-        })
-  
-        console.log("LOGIN API RESPONSE............", response)
+        });
+
+        console.log("LOGIN API RESPONSE............", response);
         if (!response.data.success) {
-          throw new Error(response.data.message)
+          throw new Error(response.data.message);
         }
-        
-        // Add some information in localStorage
+        toast.success("Login Successful");
 
-        toast.success("Login Successful")
-        
-        navigate("/")
+        localStorage.setItem("userId", JSON.stringify(response.data.user._id));
+        dispatch(setUserData(response.data));
+        dispatch(setUserId(response.data.user._id));
+
+        navigate("/");
       } catch (error) {
-        console.log("LOGIN API ERROR............", error)
-        toast.error("Login Failed")
+        console.log("LOGIN API ERROR............", error);
+        toast.error("Login Failed");
       }
-      dispatch(setLoading(false))
-      toast.dismiss(toastId)
-    }
-  }
+      dispatch(setLoading(false));
+    //   toast.dismiss(toastId);
+    };
+}
 
-  export function signUp(
+export function logout(navigate) {
+  return (dispatch) => {
+    localStorage.removeItem("userId")
+    dispatch(setUserData(null));
+    dispatch(setUserId(null));
+    toast.success("Logged Out")
+    navigate("/")
+  }
+}
+
+
+
+export function signUp(
     firstName,
     lastName,
     userName,
@@ -56,10 +63,10 @@ export function login(email, password, navigate) {
     password,
     confirmPassword,
     navigate
-  ) {
+) {
     return async (dispatch) => {
-      const toastId = toast.loading("Loading...")
-      dispatch(setLoading(true))
+      const toastId = toast.loading("Loading...");
+      dispatch(setLoading(true));
       try {
         const response = await apiConnector("POST", SIGNUP_API, {
           firstName,
@@ -68,23 +75,22 @@ export function login(email, password, navigate) {
           email,
           password,
           confirmPassword,
-        })
-  
-        console.log("SIGNUP API RESPONSE............", response)
-  
+        });
+
+        console.log("SIGNUP API RESPONSE............", response);
+
         if (!response.data.success) {
-          throw new Error(response.data.message)
+          throw new Error(response.data.message);
         }
 
-        toast.success("Signup Successful")
-        navigate("/login")
-        
+        toast.success("Signup Successful");
+        navigate("/login");
       } catch (error) {
-        console.log("SIGNUP API ERROR............", error)
-        toast.error("Signup Failed")
-        navigate("/signup")
+        console.log("SIGNUP API ERROR............", error);
+        toast.error("Signup Failed");
+        navigate("/signup");
       }
-      dispatch(setLoading(false))
-      toast.dismiss(toastId)
-    }
-  }
+      dispatch(setLoading(false));
+      toast.dismiss(toastId);
+    };
+}

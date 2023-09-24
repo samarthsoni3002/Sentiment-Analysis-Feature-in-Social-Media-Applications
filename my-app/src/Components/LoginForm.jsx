@@ -1,4 +1,4 @@
-import React,{useContext, useState}from 'react'
+import React,{useState}from 'react'
 import { toast } from 'react-toastify';
 import "./Styles/AuthStyle.css";
 import { useDispatch } from 'react-redux';
@@ -20,9 +20,6 @@ export default function LoginForm() {
     const sumbitHandler = async (e) => {
       e.preventDefault();
       dispatch(login(email,password,navigate));
-      // Access the values as formData.email and formData.password
-      // For example, you can navigate to another page after form submission
-      //   navigate('/dashboard');
     };
 
     const handleChange = (e) => {

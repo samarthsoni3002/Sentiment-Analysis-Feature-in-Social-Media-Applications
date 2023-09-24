@@ -12,27 +12,18 @@ cloudinary.config({
 const CreatePost = async (req, res) => {
   try {
     const { caption , userId } = req.body;
-    const file = req.files.file;
 
-    console.log(file);
-
-    if (!file || !caption || !userId) {
+    if (!caption || !userId) {
       return res.status(400).json({
         success: false,
         message: "Incomplete post data",
       });
     }
 
-    // Upload the image to Cloudinary
-    const cloudinaryResponse = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: 'simple', 
-    });
-
-    // Create a new post in your database with the Cloudinary image URL
+   
     const newPost = new Post({
       userId,
       caption,
-      imageUrl: cloudinaryResponse.secure_url,
     });
 
     // Save the new post to the database
@@ -44,9 +35,9 @@ const CreatePost = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Post created successfully",
-      cloudinaryResponse,
       post: newPost,
     });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({

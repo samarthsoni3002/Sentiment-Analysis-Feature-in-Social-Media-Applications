@@ -13,12 +13,21 @@ export default function RightBar() {
         </div>
       </div>
       <div className='space-y-4'>
-        <div className='text-xl font-semibold'>Online Friends</div>
+        <div className='flex justify-between'>
+          <div className='text-xl font-semibold'>Online Friends</div>
+          <div className='text-xl font-semibold mr-5'>Score</div>
+        </div>
         {Users.map(u => (
-          <div className='flex gap-2 items-center relative' key={u.id}>
-            <img src={u.profilePicture} alt="" className='h-10 w-10 rounded-full object-cover'/>
-            <div className='text-xl'>{u.username}</div>
-            <div className='h-2 w-2 rounded-full border-5 border-white bg-green-500 absolute top-0 left-0' />
+          <div className='flex justify-between' key={u.id}>
+
+            <div className='flex gap-2 items-center relative'>
+              <img src={u.profilePicture} alt="" className='h-10 w-10 rounded-full object-cover'/>
+              <div className='text-xl'>{u.username}</div>
+              <div className='h-2 w-2 rounded-full border-5 border-white bg-green-500 absolute top-0 left-0' />
+            </div>
+            <div className='mr-5'>
+              {u.score}
+            </div>
           </div>
         ))}
       </div>

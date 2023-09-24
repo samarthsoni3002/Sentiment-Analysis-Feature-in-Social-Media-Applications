@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import './Styles/AuthStyle.css';
+import { useDispatch } from 'react-redux';
+import { signUp } from '../Services/Operations/AuthAPI';
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -13,7 +15,10 @@ export default function SignUpForm() {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const {firstName,lastName,email,password,confirmPassword} = formData;
+  const userName = "";
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -24,9 +29,7 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-
-    // Add your form submission logic here
+    dispatch(signUp(firstName,lastName,userName,email,password,confirmPassword,navigate));    // Add your form submission logic here
   };
 
   return (
@@ -91,7 +94,7 @@ export default function SignUpForm() {
             </label>
             <input
               type="password"
-              value={formData.password}
+              value={formData.confirmPassword}
               className="bg-gray-200 rounded-lg p-1"
               name="confirmPassword"
               onChange={handleChange}

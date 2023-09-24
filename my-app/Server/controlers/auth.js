@@ -7,7 +7,7 @@ const SignUp = async (req, res) => {
         const { firstName , lastName, userName, email, password , confirmPassword } = req.body;
         
         // Check Weather a all input are complete or not
-        if(!firstName || !lastName || !userName || !email || !password || !confirmPassword){
+        if(!firstName || !lastName  || !email || !password || !confirmPassword){
             return res.status(402).json({
                 success: false,
                 message: "Incomplete Credentials"

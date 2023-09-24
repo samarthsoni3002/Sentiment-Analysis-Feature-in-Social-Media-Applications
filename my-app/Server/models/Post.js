@@ -6,10 +6,6 @@ const postSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  imageUrl: {
-    type: String,
-    required: true,
-  },
   caption: {
     type: String,
     default: ""
