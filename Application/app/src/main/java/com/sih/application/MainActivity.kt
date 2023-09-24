@@ -36,19 +36,40 @@ class MainActivity : AppCompatActivity() {
         profile_pic = arrayOf(
             R.drawable.person1,
             R.drawable.person2,
-            R.drawable.person3
+            R.drawable.person3,
+            R.drawable.person4,
+            R.drawable.person5,
+            R.drawable.person6,
+            R.drawable.person7,
+            R.drawable.person8,
+            R.drawable.person9,
+            R.drawable.person10
         )
 
         post_pic = arrayOf(
             R.drawable.person1,
             R.drawable.person2,
-            R.drawable.person3
+            R.drawable.person3,
+            R.drawable.person4,
+            R.drawable.person5,
+            R.drawable.person6,
+            R.drawable.person7,
+            R.drawable.person8,
+            R.drawable.person9,
+            R.drawable.person10
         )
 
         user_name = arrayOf(
-            "kate",
-            "cathy",
-            "John"
+            "Person1",
+            "Person2",
+            "Person3",
+            "Person4",
+            "Person5",
+            "Person6",
+            "Person7",
+            "Person8",
+            "Person9",
+            "Person10"
         )
 
         recyclerView = findViewById(R.id.recyclerView)
