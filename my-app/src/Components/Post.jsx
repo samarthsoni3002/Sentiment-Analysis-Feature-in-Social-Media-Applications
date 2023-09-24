@@ -16,7 +16,7 @@ const Post = ({ post }) => {
   if (!user) {
     return null; 
   }
-
+  
   // Destructure user data
   const { username, profilePicture } = user;
 
