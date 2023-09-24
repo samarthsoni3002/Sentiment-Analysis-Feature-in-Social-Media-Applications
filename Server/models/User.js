@@ -11,13 +11,13 @@ const userSchema = new mongoose.Schema({
   },
   userName:{
     type: String,
+    unique: true,
   },
   email: {
     type: String,
     required: true,
     unique: true, // Ensure email is unique
     trim: true, // Remove whitespace from the beginning and end
-    lowercase: true, // Convert email to lowercase
   },
   password: {
     type: String,
@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
   userImage: {
     type: String, // Store the URL of the user's image
   },
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Post', // Reference the 'Post' model
+    },
+  ],
 });
 
 const User = mongoose.model('User', userSchema);
